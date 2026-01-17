@@ -25,6 +25,10 @@ export default class Input {
         })
     }
 
+    /** 
+     * @param {string} key (key code)
+     * @returns {Key} 
+     */
     addKey(key){
         if (this.keys.has(key)){
             return this.keys.get(key);
