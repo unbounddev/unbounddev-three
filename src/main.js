@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import Input from './input';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -20,54 +21,31 @@ camera.lookAt(0, 0, 0);
 
 const loader = new GLTFLoader();
 
+const input = new Input();
+
 class Car {
   /** @type {THREE.Group} */
   model;
   speed = 0.05;
-  forward = false;
-  left = false;
-  right = false;
-  reverse = false;
+  keyW = input.addKey("KeyW");
+  keyA = input.addKey("KeyA");
+  keyS = input.addKey("KeyS");
+  keyD = input.addKey("KeyD");
 
   constructor(model){
     this.model = model;
-    // TODO: Create separate class for handling input
-    document.addEventListener("keydown", (e) => {
-      if (e.code == "KeyW"){
-        this.forward = true;
-      } else if(e.code == "KeyA") {
-        this.left = true;
-      } else if(e.code == "KeyD") {
-        this.right = true;
-      } else if(e.code == "KeyS") {
-        this.reverse = true;
-      }
-    })
-
-    document.addEventListener("keyup", (e) => {
-      if (e.code == "KeyW"){
-        this.forward = false;
-      } else if(e.code == "KeyA") {
-        this.left = false;
-      } else if(e.code == "KeyD") {
-        this.right = false;
-      } else if(e.code == "KeyS") {
-        this.reverse = false;
-      }
-    })
-    
   }
 
   update() {
-    if (this.right){
+    if (this.keyD.isDown){ // right
       this.model.rotateY(-0.01);
-    } else if(this.left){
+    } else if(this.keyA.isDown){ // left
       this.model.rotateY(0.01);
     }
 
-    if (this.forward){
+    if (this.keyW.isDown){
       this.moveForward()
-    } else if(this.reverse){
+    } else if(this.keyS.isDown){
       this.moveBackward()
     }
   }
