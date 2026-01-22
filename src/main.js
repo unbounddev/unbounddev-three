@@ -88,6 +88,8 @@ function animate() {
   if (car) {
     car.update();
   }
+  input.update();
+  console.log(input.gamepads[0]?.buttons[0].pressed)
   renderer.render( scene, camera );
 }
 renderer.setAnimationLoop( animate );

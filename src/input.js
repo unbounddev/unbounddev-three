@@ -6,6 +6,9 @@ export default class Input {
     keys = new Map();
     downListener;
     upListener;
+    connectedListener;
+    disconnectedListener;
+    gamepads = [];
     
     constructor(){
         this.downListener = document.addEventListener("keydown", (e) => {
@@ -23,6 +26,14 @@ export default class Input {
                 }
             }
         })
+
+        // this.connectedListener = window.addEventListener("gamepadconnected", (e) => {
+        //     this.gamepadHandler(e, true);
+        // })
+
+        // this.disconnectedListener = window.addEventListener("gamepaddisconnected", (e) => {
+        //     this.gamepadHandler(e, false);
+        // })
     }
 
     /** 
@@ -37,5 +48,21 @@ export default class Input {
             this.keys.set(key, newKey);
             return newKey;
         }
+    }
+
+    // gamepadHandler(e, connected){
+    //     const gamepad = e.gamepad;
+
+    //     console.log(e)
+
+    //     if (connected){
+    //         this.gamepads[gamepad.index] = gamepad;
+    //     } else {
+    //         this.gamepads[gamepad.index];
+    //     }
+    // }
+
+    update(){
+        this.gamepads = navigator.getGamepads()
     }
 }
