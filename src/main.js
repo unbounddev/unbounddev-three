@@ -80,7 +80,7 @@ loader.load( '/raceCarRed.glb', function ( gltf ) {
 
 } );
 
-const light = new THREE.AmbientLight( 0x404040, 20); // soft white light
+const light = new THREE.DirectionalLight();
 scene.add( light )
 
 function animate() {
