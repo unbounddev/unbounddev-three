@@ -84,12 +84,20 @@ const light = new THREE.DirectionalLight();
 scene.add( light )
 
 function animate() {
-  
+  input.update();
   if (car) {
     car.update();
+    const carPos = new THREE.Vector3();
+    car.model.getWorldPosition(carPos)
+    const carDir = new THREE.Vector3();
+    console.log(car.model.getWorldDirection(carDir));
+    const cameraPos = new THREE.Vector3(carDir.x*-5, 5, carDir.z*-5);
+    carPos.add(cameraPos)
+    camera.position.set(carPos.x, carPos.y, carPos.z);
+    camera.lookAt(car.model.position)
   }
-  input.update();
-  console.log(input.gamepads[0])
+  
+  // console.log(input.gamepads[0])
   // console.log(input.gamepads[0]?.buttons[10].pressed)
   renderer.render( scene, camera );
 }
