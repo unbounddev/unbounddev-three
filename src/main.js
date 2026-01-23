@@ -68,7 +68,7 @@ let car;
 
 
 
-loader.load( '/raceCarRed.glb', function ( gltf ) {
+loader.load( '/racing/raceCarRed.glb', function ( gltf ) {
 
   car = new Car(gltf.scene);
 
@@ -91,11 +91,19 @@ function animate() {
     car.model.getWorldPosition(carPos)
     const carDir = new THREE.Vector3();
     console.log(car.model.getWorldDirection(carDir));
-    const cameraPos = new THREE.Vector3(carDir.x*-5, 5, carDir.z*-5);
+    const cameraPos = new THREE.Vector3(carDir.x*-3.5, 3.5, carDir.z*-3.5);
     carPos.add(cameraPos)
     camera.position.set(carPos.x, carPos.y, carPos.z);
-    camera.lookAt(car.model.position)
+    camera.lookAt((new THREE.Vector3(car.model.position.x, car.model.position.y+2, car.model.position.z)))
   }
+
+  // renderer.setViewport()
+  // renderer.setScissor()
+  // renderer.setScissorTest()
+  // camera.aspect
+  // camera.updateProjectionMatrix()
+  // renderer.render()
+  
   
   // console.log(input.gamepads[0])
   // console.log(input.gamepads[0]?.buttons[10].pressed)
