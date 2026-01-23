@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import Input from './input';
+import Input, { EIGHT_BITDO_ULTIMATE_2C_MAPPING } from './input';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -89,7 +89,8 @@ function animate() {
     car.update();
   }
   input.update();
-  console.log(input.gamepads[0]?.buttons[0].pressed)
+  console.log(input.gamepads[0])
+  // console.log(input.gamepads[0]?.buttons[10].pressed)
   renderer.render( scene, camera );
 }
 renderer.setAnimationLoop( animate );
