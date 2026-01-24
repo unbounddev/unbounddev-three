@@ -7,9 +7,21 @@
     <title>unbounddev</title>
     <style>
       body { margin: 0; }
+      #joinText {
+        position: relative;
+        height: 100vh;
+      }
+
+      #joinText > span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
     </style>
   </head>
   <body>
+    <div id="joinText"><span>Press J or (A) to join</span></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
