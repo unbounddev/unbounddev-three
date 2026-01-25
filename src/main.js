@@ -2,6 +2,60 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Input, { EIGHT_BITDO_ULTIMATE_2C_MAPPING } from './input';
 
+const quadPositions = [
+  {
+    left: 0,
+    bottom: 0.5,
+    width: 0.5,
+    height: 0.5
+  },
+  {
+    left: 0.5,
+    bottom: 0.5,
+    width: 0.5,
+    height: 0.5
+  },
+  {
+    left: 0,
+    bottom: 0,
+    width: 0.5,
+    height: 0.5
+  },
+  {
+    left: 0.5,
+    bottom: 0,
+    width: 0.5,
+    height: 0.5
+  },
+]
+
+const positions = [
+  [
+    {
+      left: 0,
+      bottom: 0,
+      width: 1,
+      height: 1
+    }
+  ],
+  [
+    {
+      left: 0,
+      bottom: 0,
+      width: 0.5,
+      height: 1
+    },
+    {
+      left: 0.5,
+      bottom: 0,
+      width: 1,
+      height: 1
+    },
+  ],
+  quadPositions,
+  quadPositions
+]
+
 /** @type {Map<string, Map<string, GLTFLoader>>} */
 const modelAssets = new Map();
 modelAssets.set("racing", new Map());
@@ -155,11 +209,23 @@ function animate() {
     
     players[i].update()
 
-    // renderer.setViewport()
-    // renderer.setScissor()
-    // renderer.setScissorTest()
-    // camera.aspect
-    // camera.updateProjectionMatrix()
+    let viewPositions = positions[players.length-1][i];
+
+    let left = viewPositions.left;
+    let bottom = viewPositions.bottom;
+    let width = viewPositions.width;
+    let height = viewPositions.height;
+
+    left = left * window.innerWidth;
+    bottom = bottom * window.innerHeight;
+    width = width * window.innerWidth;
+    height = height * window.innerHeight;
+
+    renderer.setViewport(left, bottom, width, height);
+    renderer.setScissor(left, bottom, width, height);
+    renderer.setScissorTest(true);
+    camera.aspect = width / height
+    camera.updateProjectionMatrix()
     
 
     renderer.render( scene, camera )
