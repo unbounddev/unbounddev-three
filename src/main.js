@@ -83,6 +83,7 @@ class Player {
     this.game = game;
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.set(0, 5, 0)
+    this.input = input;
     this.addCar();
     if (input.type == "keyboard"){
       this.keyW = game.input.addKey("KeyW");
@@ -203,6 +204,7 @@ function animate() {
   }
   joinText.style.display = "none";
   game.input.update();
+  console.log(game.input.gamepads[0]?.id)
   for (let i = 0; i < players.length; i++){
     const camera = players[i].camera;
     

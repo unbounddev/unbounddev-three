@@ -1,5 +1,7 @@
 /** @typedef {{ isDown: boolean }} Key */
 
+// Vendor: 2dc8 Product: 310a 8BitDo Ultimate 2C 
+
 
 export const EIGHT_BITDO_ULTIMATE_2C_MAPPING = {
     "A": 0,
@@ -25,6 +27,82 @@ export const EIGHT_BITDO_ULTIMATE_2C_AXES = {
     "DX": 6,
     "DY": 7
 }
+
+/** @interface */
+class ControllerMapping {
+    /** @type {string} */
+    product;
+    /** @type {string} */
+    vendor;
+    convertToStandard() { }   
+}
+
+/** @implements {ControllerMapping} */
+class Ultimate2CMapping {
+    product = "310a";
+    vendor = "2dc8";
+    convertToStandard(/** @type {Gamepad} */gamepad) {
+        const newGamepad = {
+            id: gamepad.id,
+            mapping: "standard",
+            connected: gamepad.connected,
+            hapticActuators: gamepad.hapticActuators || [],
+            vibrationActuator: gamepad.vibrationActuator,
+            index: gamepad.index,
+            timestamp: gamepad.timestamp
+        }
+        let buttons = gamepad.buttons;
+        let axes = gamepad.axes;
+        let buttonMapping = EIGHT_BITDO_ULTIMATE_2C_MAPPING;
+        let axesMapping = EIGHT_BITDO_ULTIMATE_2C_AXES;
+        newGamepad.buttons = [
+            buttons[buttonMapping.A],
+            buttons[buttonMapping.B],
+            buttons[buttonMapping.X],
+            buttons[buttonMapping.Y],
+            buttons[buttonMapping.LB],
+            buttons[buttonMapping.RB],
+            {
+                pressed: axes[axesMapping.LT] > -1,
+                value: axes[axesMapping.LT]
+            },
+            {
+                pressed: axes[axesMapping.RT] > -1,
+                value: axes[axesMapping.RT]
+            },
+            buttons[buttonMapping.MINUS],
+            buttons[buttonMapping.PLUS],
+            buttons[buttonMapping.LSB],
+            buttons[buttonMapping.RSB],
+            {
+                pressed: axes[axesMapping.DY] == -1,
+                value: axes[axesMapping.DY]
+            },
+            {
+                pressed: axes[axesMapping.DY] == 1,
+                value: axes[axesMapping.DY]
+            },
+            {
+                pressed: axes[axesMapping.DX] == -1,
+                value: axes[axesMapping.DX]
+            },
+            {
+                pressed: axes[axesMapping.DX] == 1,
+                value: axes[axesMapping.DX]
+            },
+            buttons[buttonMapping.HOME]
+        ]
+        newGamepad.axes = [
+            axes[axesMapping.LSX],
+            axes[axesMapping.LSY],
+            axes[axesMapping.RSX],
+            axes[axesMapping.RSY]
+        ]
+    }
+}
+
+/** @type {ControllerMapping[]} */
+const mappings = [new Ultimate2CMapping()]
 
 export default class Input {
     /** @type {Map<string, Key>} */
@@ -88,6 +166,31 @@ export default class Input {
     // }
 
     update(){
-        this.gamepads = navigator.getGamepads()
+        this.gamepads = [];
+        for (let gamepad of navigator.getGamepads()){
+            let gamepadAdded = false;
+            if (gamepad == null){
+                this.gamepads.push(gamepad)
+                gamepadAdded = true;
+            } else if (gamepad.mapping == "standard"){
+                this.gamepads.push(gamepad);
+                gamepadAdded = true;
+            } else {
+                for (let mapping of mappings){
+                    let gamepadId = gamepad.id.toLowerCase();
+                    let mappingProduct = mapping.product.toLowerCase();
+                    let mappingVendor = mapping.vendor.toLowerCase();
+                    if (gamepadId.includes(mappingProduct) && gamepadId.includes(mappingVendor)){
+                        mapping.convertToStandard(gamepad);
+                        this.gamepads.push(gamepad);
+                        gamepadAdded = true;
+                    }
+                }
+            }
+            if (!gamepadAdded){
+                this.gamepads.push(gamepad);
+                console.error("Mapping for gamepad could not be found", gamepad);
+            }
+        }
     }
 }
