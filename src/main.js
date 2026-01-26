@@ -187,12 +187,11 @@ const light = new THREE.DirectionalLight();
 scene.add( light )
 
 window.addEventListener("keydown", (e) => {
-  if (e.code == "KeyJ"){
-    if (players.some(p => p.input.type == "keyboard")){
-      return;
-    }
-    players.push(new Player(game, { type: "keyboard" }));
+  if (e.code != "KeyJ"){ return }
+  if (players.length >= 4 || players.some(p => p.input.type == "keyboard")){
+    return;
   }
+  players.push(new Player(game, { type: "keyboard" }));
 })
 
 const joinText = document.getElementById("joinText");
